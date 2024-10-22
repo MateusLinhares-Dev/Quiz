@@ -1,0 +1,21 @@
+{% extends "base/base.html" %}
+
+{% block title %}Quiz softexpert{% endblock title %}
+
+{% block body %}
+  <!-- Main content container -->
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 text-center">
+            <h1 class="mb-3">Bem-vindo ao Quiz SoftExpert!</h1>
+            <p class="lead">Insira o código fornecido para acessar o sistema.</p>
+            <form class="d-flex justify-content-center" method="post">
+                {% csrf_token %}
+                <input type="text" name="quiz_code" class="form-control w-75" placeholder="Digite seu código" required>
+                <input type="text" name="name" class="form-control w-75" placeholder="Digite seu nome" required>
+                <button type="submit" class="btn btn-primary ms-2">Entrar</button>
+            </form>
+        </div>
+    </div>
+  </div>
+{% endblock %}

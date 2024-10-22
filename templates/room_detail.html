@@ -1,0 +1,95 @@
+{% extends "base/base.html" %}
+
+{% block title %}Quiz - Perguntas e Respostas{% endblock title %}
+
+{% block body %}
+<div class="container mt-5">
+    <!-- Exibe o nome do jogador e o código da sala -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h2 class="text-primary">Bem-vindo, <strong>{{ current_player.name }}</strong>!</h2>
+            <p>Sala: <strong>{{ room.name }}</strong> | Código: <span class="badge bg-info">{{ room.code }}</span></p>
+        </div>
+    </div>
+    
+    {% if question %}
+    <!-- Exibe a pergunta -->
+    <div class="question card shadow-sm mb-4">
+        <div class="card-body">
+            <h3 class="text-secondary">{{ question.text }}</h3>
+        </div>
+    </div>
+
+    <!-- Exibe as opções de múltipla escolha -->
+    <form method="post" class="mb-5">
+        {% csrf_token %}
+        <ul class="list-group">
+            {% for answer in response %}
+            <li class="list-group-item">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="answer" id="answer{{ answer.id }}" value="{{ answer.id }}">
+                    <label class="form-check-label" for="answer{{ answer.id }}">
+                        {{ answer.text }}
+                    </label>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success btn-lg px-5">Responder</button>
+        </div>
+    </form>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        Você já respondeu todas as perguntas!
+        <form method="get" class="mb-5" action="{% url 'inicio' %}">
+            <button type="submit" class="btn btn-success btn-lg px-5">Voltar</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Exibe os jogadores e suas pontuações -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h4 class="mb-4">Jogadores na Sala e suas Pontuações</h4>
+            <ul class="list-group">
+                {% for player in players %}
+                <li class="list-group-item d-flex justify-content-between align-items-center {% if player.id == current_player.id %}active{% endif %}">
+                    {{ player.name }}
+                    <span class="badge bg-primary">{{ player.points }}</span> <!-- Exibe a pontuação do jogador -->
+                    {% if player.id == current_player.id %}
+                    <span class="badge bg-info">Você</span>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+    .question {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .form-check-input {
+        transform: scale(1.2);
+    }
+
+    .list-group-item.active {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-lg {
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .btn-lg:hover {
+        background-color: #28a745;
+    }
+</style>
+{% endblock body %}
