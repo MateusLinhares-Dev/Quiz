@@ -33,6 +33,7 @@ def room_detail(request, code, id_player):
     # Controle do índice da pergunta atual
     current_question_index = request.session.get('current_question_index', 0)
 
+
     # Se houver perguntas
     if current_question_index < len(questions):
         question = questions[current_question_index]
@@ -74,12 +75,16 @@ def room_detail(request, code, id_player):
 
     # Coletar pontuações de todos os jogadores
     players_scores = {player.id: player.points for player in players}
-        
+    
+    # retornar perguntas e respostas 
+    score = Scoring.objects.filter(user=current_player)
+    
     return render(request, 'room_detail.html', {
         'room': room,
         'players': players,
         'response': responses,
         'question': question,
+        'score_question':score,
         'current_player': current_player,
         'players_scores': players_scores
     })

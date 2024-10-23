@@ -1,21 +1,23 @@
 {% extends "base/base.html" %}
-
-{% block title %}Quiz softexpert{% endblock title %}
+{% load static %}
+{% block title %}Quiz SoftExpert{% endblock title %}
 
 {% block body %}
   <!-- Main content container -->
   <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-12 col-md-8 text-center">
-            <h1 class="mb-3">Bem-vindo ao Quiz SoftExpert!</h1>
-            <p class="lead">Insira o código fornecido para acessar o sistema.</p>
-            <form class="d-flex justify-content-center" method="post">
+            <h1 class="mb-4 text-primary">Bem-vindo ao Quiz SoftExpert!</h1>
+            <p class="lead text-muted">Insira o código fornecido para acessar o sistema.</p>
+            <form class="d-flex flex-column align-items-center" method="post">
                 {% csrf_token %}
-                <input type="text" name="quiz_code" class="form-control w-75" placeholder="Digite seu código" required>
-                <input type="text" name="name" class="form-control w-75" placeholder="Digite seu nome" required>
-                <button type="submit" class="btn btn-primary ms-2">Entrar</button>
+                <input type="text" name="quiz_code" class="form-control w-75 mb-3" placeholder="Digite seu código" required>
+                <input type="text" name="name" class="form-control w-75 mb-3" placeholder="Digite seu nome" required>
+                <button type="submit" class="btn btn-primary w-75">Entrar</button>
             </form>
         </div>
     </div>
   </div>
+
+  <link rel="stylesheet" href="{% static '/css/index.css' %}">
 {% endblock %}

@@ -1,34 +1,35 @@
 {% extends "base/base.html" %}
+{% load static %}
 
-{% block title %}Quiz - Perguntas e Respostas{% endblock title %}
+{% block title %}Quiz Interativo - Perguntas e Respostas{% endblock title %}
 
 {% block body %}
 <div class="container mt-5">
-    <!-- Exibe o nome do jogador e o código da sala -->
-    <div class="card mb-4 shadow-sm">
-        <div class="card-body">
-            <h2 class="text-primary">Bem-vindo, <strong>{{ current_player.name }}</strong>!</h2>
-            <p>Sala: <strong>{{ room.name }}</strong> | Código: <span class="badge bg-info">{{ room.code }}</span></p>
+    <!-- Tela de boas-vindas -->
+    <div class="card mb-4 shadow border-0 rounded-lg text-center bg-dark text-white animate__animated animate__zoomIn">
+        <div class="card-body py-5">
+            <h2 class="display-4 text-warning">Bem-vindo, <strong>{{ current_player.name }}</strong>!</h2>
+            <p class="lead">Sala: <strong>{{ room.name }}</strong> | Código: <span class="badge bg-warning fs-5">{{ room.code }}</span></p>
         </div>
     </div>
     
     {% if question %}
     <!-- Exibe a pergunta -->
-    <div class="question card shadow-sm mb-4">
-        <div class="card-body">
-            <h3 class="text-secondary">{{ question.text }}</h3>
+    <div class="question card shadow-lg border-0 mb-4 animate__animated animate__fadeIn bg-gradient-primary text-black">
+        <div class="card-body py-4 px-5">
+            <h3 class="text-black">{{ question.text }}</h3>
         </div>
     </div>
 
-    <!-- Exibe as opções de múltipla escolha -->
-    <form method="post" class="mb-5">
+    <!-- Exibe as opções de múltipla escolha com animação -->
+    <form method="post" class="mb-5 animate__animated animate__bounceIn">
         {% csrf_token %}
         <ul class="list-group">
             {% for answer in response %}
-            <li class="list-group-item">
+            <li class="list-group-item border-0 my-2 rounded-lg shadow-lg bg-dark text-white option-item">
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="answer" id="answer{{ answer.id }}" value="{{ answer.id }}">
-                    <label class="form-check-label" for="answer{{ answer.id }}">
+                    <label class="form-check-label ms-2" for="answer{{ answer.id }}">
                         {{ answer.text }}
                     </label>
                 </div>
@@ -37,29 +38,46 @@
         </ul>
 
         <div class="text-center mt-4">
-            <button type="submit" class="btn btn-success btn-lg px-5">Responder</button>
+            <button type="submit" class="btn btn-warning btn-lg px-5 py-3 shadow-lg rounded-pill animate__animated animate__tada">Responder</button>
         </div>
     </form>
     {% else %}
-    <div class="alert alert-info" role="alert">
-        Você já respondeu todas as perguntas!
-        <form method="get" class="mb-5" action="{% url 'inicio' %}">
-            <button type="submit" class="btn btn-success btn-lg px-5">Voltar</button>
-        </form>
+    <div class="alert alert-warning p-4 rounded-lg shadow-lg text-center animate__animated animate__flipInX">
+        <h4 class="alert-heading mb-3">Parabéns, você respondeu todas as perguntas!</h4>
+        <p class="lead">Aqui estão as perguntas que você acertou:</p>
+    </div>
+    <div class="card shadow-lg border-0 bg-gradient-success">
+        <div class="card-body py-4 px-5">
+            <ul class="list-group">
+                {% for sc in score_question %}
+                <li class="list-group-item d-flex justify-content-between align-items-center my-2 shadow-lg rounded-lg bg-dark text-white {% if sc.correct %}border-success{% else %}border-danger{% endif %}">
+                    <div>
+                        <strong class="d-block">Pergunta:</strong> {{ sc.question.text }}
+                        <strong class="d-block mt-2">Sua resposta:</strong> {{ sc.response.text }}
+                    </div>
+                    <span class="badge {% if sc.correct %}bg-success text-white{% else %}bg-danger{% endif %} fs-5 shadow-lg">{{ sc.correct|yesno:"Correto,Errado" }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="{% url 'inicio' %}" class="btn btn-warning btn-lg px-5 py-3 shadow-lg rounded-pill">Voltar</a>
     </div>
     {% endif %}
 
     <!-- Exibe os jogadores e suas pontuações -->
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <h4 class="mb-4">Jogadores na Sala e suas Pontuações</h4>
+    <div class="card mt-5 shadow-lg border-0 bg-gradient-info text-white">
+        <div class="card-body py-4 px-5">
+            <h4 class="mb-4 text-center">Jogadores na Sala e suas Pontuações</h4>
             <ul class="list-group">
                 {% for player in players %}
-                <li class="list-group-item d-flex justify-content-between align-items-center {% if player.id == current_player.id %}active{% endif %}">
-                    {{ player.name }}
-                    <span class="badge bg-primary">{{ player.points }}</span> <!-- Exibe a pontuação do jogador -->
+                <li class="list-group-item d-flex justify-content-between align-items-center my-2 shadow-lg rounded-lg bg-dark text-white {% if player.id == current_player.id %}bg-primary text-white{% endif %}">
+                    <div>{{ player.name }}</div>
+                    <span class="badge bg-warning fs-5">{{ player.points }}</span>
                     {% if player.id == current_player.id %}
-                    <span class="badge bg-info">Você</span>
+                    <span class="badge bg-info fs-6 ms-2">Você</span>
                     {% endif %}
                 </li>
                 {% endfor %}
@@ -68,28 +86,7 @@
     </div>
 </div>
 
-<style>
-    .question {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border-radius: 10px;
-    }
+<link href="{% static "/css/style.css" %}" rel="stylesheet">
+<script src="{% static "/js/main.js" %}"></script>
 
-    .form-check-input {
-        transform: scale(1.2);
-    }
-
-    .list-group-item.active {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .btn-lg {
-        transition: background-color 0.3s ease-in-out;
-    }
-
-    .btn-lg:hover {
-        background-color: #28a745;
-    }
-</style>
 {% endblock body %}
