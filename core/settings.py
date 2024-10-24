@@ -1,11 +1,17 @@
 from pathlib import Path
+from dotenv import load_dotenv
 import os
+
+#carregar váriaveis de ambiente
+load_dotenv()
+DEBUG_FALSE = os.getenv('DEBUG_FALSE')
+SECRET_KEY_ENV = os.getenv('SECRET_KEY_ENV')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-!nbeut6-87^p=-4i@(6w3^1n9zd_hlz%gj=!rw@0lnmbj#uq)4'
+SECRET_KEY = SECRET_KEY_ENV
 
-DEBUG = True
+DEBUG = DEBUG_FALSE
 
 ALLOWED_HOSTS = ["*"]
 
@@ -13,6 +19,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,9 +64,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -90,7 +94,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'pt-Br'
+LANGUAGE_CODE = 'pt-BR'
 
 TIME_ZONE = 'America/Sao_Paulo'
 
@@ -101,10 +105,36 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "SoftQuiz Game",
+    "site_header": "Quiz Softexpert",
+    "site_brand": "Quiz Softexpert",
+    "site_logo": "img/logo.png",
+    "login_logo": "img/logo.png",
+    "login_logo_dark": "img/logo.png",
+    "site_logo_classes": "img-thumbnail",
+    "site_icon": "img/icon.png",
+    "welcome_sign": "Bem-vindo ao gerenciador do SoftQuiz",
+    "copyright": "Copyright © 2024 SoftQuiz. Todos os direitos reservados ao Mateus Linhares",
+    "search_model": ["auth.User", "auth.Group"],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "room.Room": "fas fa-window-restore",
+        "questionandanswer.Scoring": "fas fa-star",
+        "questionandanswer.Question": "fas fa-question"
+    },
+}  

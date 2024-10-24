@@ -1,16 +1,16 @@
 from django.contrib import admin
-from django.db.models.query import QuerySet
+from questionandanswer.models import Question, Response
 from django.forms import ModelForm
 from django.http import HttpRequest
 from .models import Room
 from typing import Any
 
+# Configuração do admin para Room
 class RoomAdmin(admin.ModelAdmin):
-    
-    fields = ['name',"code"]
+    model = Room
+    search_fields = ['name', 'code']
     list_display = ["name", "code", "admin"]
     readonly_fields = ['code', 'admin']
-    search_fields = ['name', 'code', 'admin']
 
     def save_model(self, request: HttpRequest, obj: Any, form: ModelForm, change: bool):
         if not obj.pk:

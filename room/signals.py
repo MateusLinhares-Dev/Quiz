@@ -8,7 +8,7 @@ import string
 
 @receiver(pre_save, sender=Room)
 def room_pre_save(sender, instance, **kwargs):
-    print("PRE SAVE")
+
     """Ao salvar gere uma chave aleatório para sala criada"""
     key = ''.join(random.choice(string.ascii_letters) for _ in range(6))
 

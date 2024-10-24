@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 class Room(models.Model):
-    name = models.CharField(max_length=150)
-    code = models.CharField(max_length=6, unique=True, null=False, blank=False, default="Código gerado após salvar a sala...")
-    admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name="salas_criadas")
-    create_date = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(verbose_name="Nome", max_length=150)
+    code = models.CharField(verbose_name="Código", max_length=6, unique=True, null=False, blank=False, default="Código gerado após salvar a sala...")
+    admin = models.ForeignKey(User, verbose_name="Administrador", on_delete=models.CASCADE, related_name="salas_criadas")
+    create_date = models.DateTimeField(verbose_name="Data de criação",auto_now_add=True)
 
     def clean(self):
         """Validação dos forms"""
@@ -21,6 +21,8 @@ class Room(models.Model):
                     raise ValidationError("O nome da sala não pode ser alterado")
     
     class Meta:
+        verbose_name = "Sala"
+        verbose_name_plural = "Salas"
         ordering = ['name']
         
     def __str__(self) -> str:

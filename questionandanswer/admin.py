@@ -1,4 +1,5 @@
 from django.contrib import admin
+from room.models import Room
 from .models import Question, Response, Scoring
 
 class ResponseAdmin(admin.TabularInline):
@@ -11,11 +12,11 @@ class QuestionAdmin(admin.ModelAdmin):
     model = Question
     inlines = (ResponseAdmin, )
     list_display = ['text',]
-    search_fields = ['room', 'text', 'questions__text']
+    search_fields = ['text','questions__text',]
 
 class ScoringAdmin(admin.ModelAdmin):
     list_display = ['question', 'response', 'correct', 'points']
-
+    
     class Meta:
         model = Scoring
 
