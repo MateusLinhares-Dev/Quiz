@@ -25,12 +25,12 @@
     <form method="post" class="mb-5 animate__animated animate__bounceIn">
         {% csrf_token %}
         <ul class="list-group">
-            {% for answer in response %}
+            {% for answer in responses %}
             <li class="list-group-item border-0 my-2 rounded-lg shadow-lg bg-dark text-white option-item">
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="answer" id="answer{{ answer.id }}" value="{{ answer.id }}">
                     <label class="form-check-label ms-2" for="answer{{ answer.id }}">
-                        {{ answer.text }}
+                        {{ answer.text_response }}
                     </label>
                 </div>
             </li>
@@ -53,7 +53,7 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center my-2 shadow-lg rounded-lg bg-dark text-white {% if sc.correct %}border-success{% else %}border-danger{% endif %}">
                     <div>
                         <strong class="d-block">Pergunta:</strong> {{ sc.question.text }}
-                        <strong class="d-block mt-2">Sua resposta:</strong> {{ sc.response.text }}
+                        <strong class="d-block mt-2">Sua resposta:</strong> {{ sc.response.text_response }}
                     </div>
                     <span class="badge {% if sc.correct %}bg-success text-white{% else %}bg-danger{% endif %} fs-5 shadow-lg">{{ sc.correct|yesno:"Correto,Errado" }}</span>
                 </li>

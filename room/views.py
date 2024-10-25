@@ -82,7 +82,7 @@ def room_detail(request, code, id_player):
     return render(request, 'room_detail.html', {
         'room': room,
         'players': players,
-        'response': responses,
+        'responses': responses,
         'question': question,
         'score_question':score,
         'current_player': current_player,
